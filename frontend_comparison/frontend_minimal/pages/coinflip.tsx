@@ -1,40 +1,58 @@
-import { useWallet } from '@solana/wallet-adapter-react'
+import { useWallet, useConnection } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { useState } from 'react'
-import CreateModal from '../components/CreateModal'
-import GameCard from '../components/GameCard'
-
-interface Game {
-  id: string
-  creator: string
-  amount: number
-}
+import { setupProgram } from '../lib/solana'
+import * as anchor from '@project-serum/anchor'
 
 export default function CoinFlipPage() {
-  const { publicKey } = useWallet()
-  const [isModalOpen, setModalOpen] = useState(false)
-  const [games, setGames] = useState<Game[]>([
-    { id: "1", creator: "Alice", amount: 0.5 },
-    { id: "2", creator: "Bob", amount: 1.2 },
-  ])
+  const { publicKey, wallet } = useWallet()
+  const { connection } = useConnection()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const handleCreateGame = async () => {
+    if (!publicKey || !wallet) {
+      setError('Connect your wallet first')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    try {
+      const provider = new anchor.AnchorProvider(connection, wallet, {})
+      const program = setupProgram(provider)
+
+      const tx = await program.methods
+        .createGame(
+          new anchor.BN(0.1 * anchor.web3.LAMPORTS_PER_SOL), // 0.1 SOL
+          0, // Side choice
+          'd6a09b9b3546a...' // Заглушка сид
+        )
+        .rpc()
+
+      console.log('Transaction signature:', tx)
+      alert(`Game created! TX: ${tx.slice(0, 10)}...`)
+    } catch (err: any) {
+      console.error(err)
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="container">
       <WalletMultiButton />
-      
-      {publicKey && (
-        <button onClick={() => setModalOpen(true)} className="create-btn">
-          Create Game
-        </button>
-      )}
+      {error && <div className="error">{error}</div>}
 
-      <div className="games-list">
-        {games.map(game => (
-          <GameCard key={game.id} game={game} />
-        ))}
-      </div>
-
-      <CreateModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      <button 
+        onClick={handleCreateGame}
+        disabled={loading}
+        className={`create-btn ${loading ? 'loading' : ''}`}
+      >
+        {loading ? 'Creating...' : 'Create Game (0.1 SOL)'}
+      </button>
     </div>
   )
 }
