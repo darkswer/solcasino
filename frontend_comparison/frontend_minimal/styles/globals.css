@@ -1,0 +1,57 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #1a1a1a;
+  color: white;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.create-btn {
+  background: #6c5ce7;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.game-card {
+  background: #2d3436;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.join-btn {
+  background: #00b894;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: #2d3436;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+}
