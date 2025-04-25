@@ -1,0 +1,59 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #1e1e2f;
+  color: white;
+}
+
+.solpot-style-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.solpot-create-btn {
+  background: #6c5ce7;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.solpot-game-card {
+  background: #2d3436;
+  color: white;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.solpot-join-btn {
+  background: #00b894;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.solpot-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.solpot-modal {
+  background: #2d3436;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+}
