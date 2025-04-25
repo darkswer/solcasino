@@ -1,0 +1,144 @@
+{
+  "version": "0.1.0",
+  "name": "solana_casino",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {"name": "casino", "isMut": true, "isSigner": false},
+        {"name": "admin", "isMut": true, "isSigner": true},
+        {"name": "vault", "isMut": true, "isSigner": false},
+        {"name": "systemProgram", "isMut": false, "isSigner": false}
+      ],
+      "args": [{"name": "commissionFee", "type": "u8"}]
+    },
+    {
+      "name": "createGame",
+      "accounts": [
+        {"name": "game", "isMut": true, "isSigner": false},
+        {"name": "casino", "isMut": true, "isSigner": false},
+        {"name": "vault", "isMut": true, "isSigner": false},
+        {"name": "player", "isMut": true, "isSigner": true},
+        {"name": "systemProgram", "isMut": false, "isSigner": false}
+      ],
+      "args": [
+        {"name": "betAmount", "type": "u64"},
+        {"name": "sideChoice", "type": "u8"},
+        {"name": "serverSeedHash", "type": "string"}
+      ]
+    },
+    {
+      "name": "joinGame",
+      "accounts": [
+        {"name": "game", "isMut": true, "isSigner": false},
+        {"name": "casino", "isMut": false, "isSigner": false},
+        {"name": "vault", "isMut": true, "isSigner": false},
+        {"name": "player", "isMut": true, "isSigner": true},
+        {"name": "systemProgram", "isMut": false, "isSigner": false}
+      ],
+      "args": [{"name": "selectedBlockHash", "type": "string"}]
+    },
+    {
+      "name": "resolveGame",
+      "accounts": [
+        {"name": "game", "isMut": true, "isSigner": false},
+        {"name": "casino", "isMut": false, "isSigner": false},
+        {"name": "vault", "isMut": true, "isSigner": false},
+        {"name": "winner", "isMut": true, "isSigner": false},
+        {"name": "admin", "isMut": true, "isSigner": true},
+        {"name": "systemProgram", "isMut": false, "isSigner": false}
+      ],
+      "args": [
+        {"name": "serverSeed", "type": "string"},
+        {"name": "winner", "type": "publicKey"}
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Casino",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {"name": "admin", "type": "publicKey"},
+          {"name": "vault", "type": "publicKey"},
+          {"name": "commissionFee", "type": "u8"},
+          {"name": "totalGames", "type": "u64"},
+          {"name": "totalVolume", "type": "u64"}
+        ]
+      }
+    },
+    {
+      "name": "Game",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {"name": "creator", "type": "publicKey"},
+          {"name": "betAmount", "type": "u64"},
+          {"name": "creatorSide", "type": "u8"},
+          {"name": "serverSeedHash", "type": "string"},
+          {"name": "state", "type": {"defined": "GameState"}},
+          {"name": "joiner", "type": {"option": "publicKey"}},
+          {"name": "winner", "type": {"option": "publicKey"}},
+          {"name": "serverSeed", "type": {"option": "string"}},
+          {"name": "blockHash", "type": {"option": "string"}}
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "GameState",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {"name": "Created"},
+          {"name": "Joined"},
+          {"name": "Completed"},
+          {"name": "Cancelled"}
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "GameCreatedEvent",
+      "fields": [
+        {"name": "gameId", "type": "publicKey"},
+        {"name": "creator", "type": "publicKey"},
+        {"name": "betAmount", "type": "u64"},
+        {"name": "creatorSide", "type": "u8"}
+      ]
+    },
+    {
+      "name": "GameJoinedEvent",
+      "fields": [
+        {"name": "gameId", "type": "publicKey"},
+        {"name": "joiner", "type": "publicKey"},
+        {"name": "blockHash", "type": "string"}
+      ]
+    },
+    {
+      "name": "GameResolvedEvent",
+      "fields": [
+        {"name": "gameId", "type": "publicKey"},
+        {"name": "winner", "type": "publicKey"},
+        {"name": "prizeAmount", "type": "u64"},
+        {"name": "commissionAmount", "type": "u64"},
+        {"name": "serverSeed", "type": "string"}
+      ]
+    }
+  ],
+  "errors": [
+    {"code": 6000, "name": "BetTooSmall", "msg": "Bet amount too small"},
+    {"code": 6001, "name": "InvalidSide", "msg": "Invalid side"},
+    {"code": 6002, "name": "InvalidHash", "msg": "Invalid hash"},
+    {"code": 6003, "name": "InvalidGameState", "msg": "Invalid game state"},
+    {"code": 6004, "name": "Unauthorized", "msg": "Unauthorized"},
+    {"code": 6005, "name": "InvalidWinner", "msg": "Invalid winner"},
+    {"code": 6006, "name": "CommissionTooHigh", "msg": "Commission fee too high"}
+  ],
+  "metadata": {
+    "address": "CoinF1ipHVCxXGj7bfoShbFNoMwAU9a1DTVaJYfMXAUMQ"
+  }
+}
