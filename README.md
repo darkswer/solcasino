@@ -3,7 +3,7 @@
 ## Structure
 - /contracts — Smart contracts (Anchor / Solana)
 - /backend — Backend API server (Node.js / Express)
-- /frontend — (Future) Frontend app (Next.js / Tailwind)
+- /frontend_comparison/frontend_minimal — Sample frontend app (Next.js / Tailwind)
 - /old_versions — All early contract versions (backup)
 
 ## Description
